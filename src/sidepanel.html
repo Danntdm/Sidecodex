@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotePad Extension</title>
+    <link href="./lib/quill.snow.css" rel="stylesheet">
+    <link href="./style.css" rel="stylesheet" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="notepad">
+    <!-- HEADER -->
+    <div id="navbar">
+        <div class="navbar-title">
+            <span id="noteType" class="note-type">Plaintext</span>
+            <span id="noteTitle" class="note-title">Untitled</span>
+        </div>
+        <button id="savedNotesBtn" title="Saved Notes">
+            <span class="material-icons">more_vert</span>
+        </button>
+        
+        <!-- Toolbar -->
+        <div id="toolbar" style="display:none;">        
+
+
+        <!-- Font Size -->
+        <div class="font-size-control">
+            <button id="decreaseFontBtn" title="Decrease font size">-</button>
+            <div class="font-size-dropdown-wrapper">
+                <input id="fontSizeInput" type="text" value="14" aria-label="Font size" readonly />
+                <div id="fontSizeDropdown" class="font-size-dropdown">
+                    <div class="font-size-option" data-size="10">10</div>
+                    <div class="font-size-option" data-size="11">11</div>
+                    <div class="font-size-option" data-size="12">12</div>
+                    <div class="font-size-option" data-size="13">13</div>
+                    <div class="font-size-option" data-size="14">14</div>
+                    <div class="font-size-option" data-size="16">16</div>
+                    <div class="font-size-option" data-size="18">18</div>
+                    <div class="font-size-option" data-size="20">20</div>
+                    <div class="font-size-option" data-size="22">22</div>
+                    <div class="font-size-option" data-size="24">24</div>
+                    <div class="font-size-option" data-size="28">28</div>
+                    <div class="font-size-option" data-size="32">32</div>
+                    <div class="font-size-option" data-size="36">36</div>
+                    <div class="font-size-option" data-size="48">48</div>
+                    <div class="font-size-option" data-size="72">72</div>
+                </div>
+            </div>
+            <button id="increaseFontBtn" title="Increase font size">+</button>
+        </div>
+
+        <select id="fontSelect" title="Font">
+            <option value="Arial">Arial</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+        </select>
+        
+        
+        <!-- Text Alignment -->
+        <button id="alignLeftBtn" title="Align Left">
+            <span class="material-icons">format_align_left</span></button>
+        <button id="alignCenterBtn" title="Align Center">
+            <span class="material-icons">format_align_center</span></button>
+        <button id="alignRightBtn" title="Align Right">
+            <span class="material-icons">format_align_right</span></button>
+
+
+        <!-- Basic Formatting -->
+        <button id="boldBtn" title="Bold">
+            <span class="material-icons">format_bold</span></button>
+        <button id="italicBtn" title="Italic">
+            <span class="material-icons">format_italic</span></button>
+        <button id="underlineBtn" title="Underline">
+            <span class="material-icons">format_underlined</span></button>
+        <button id="strikeBtn" title="Strikethrough">
+            <span class="material-icons">strikethrough_s</span></button>
+        
+        <!-- Lists -->
+        <button id="ulBtn" title="Bullet List">
+            <span class="material-icons">format_list_bulleted</span></button>
+        <button id="olBtn" title="Numbered List">
+            <span class="material-icons">format_list_numbered</span></button>
+
+        
+            <!-- Clear -->
+            <button id="clearBtn" title="Clear Formatting">
+                <span class="material-icons">format_clear</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- PLAIN TEXT -->
+    <div id="plainTextEditor">
+        <textarea id="plainTextArea"></textarea>
+    </div>
+
+    <!-- RICH TEXT -->
+    <div id="richTextEditor" style="display:none;">
+        <div id="richTextArea"></div>
+    </div>
+
+</div>
+
+<!-- Saved Notes Modal -->
+<div id="savedNotesModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Notes</h2>
+            <div class="modal-header-actions">
+                <button id="darkModeBtn" class="dark-mode-btn" title="Toggle dark mode">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+                <button id="menuBtn" class="menu-btn" title="Menu">
+                    <span class="material-icons">menu</span>
+                </button>
+                <button id="newNoteBtn" class="new-note-btn" title="New note">
+                    <span class="material-icons">add</span>
+                </button>
+                <button id="closeSavedNotesBtn" class="close-btn" title="Close">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="notes-list" id="notesList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Note Item Template -->
+<template id="noteItemTemplate">
+    <div class="note-item">
+        <div class="note-item-info">
+            <div class="note-item-title"></div>
+            <div class="note-item-meta">
+                <span class="note-item-type"></span>
+                <span class="note-item-date"></span>
+            </div>
+        </div>
+        <div class="note-item-actions">
+            <button class="download-btn" title="Download note">
+                <span class="material-icons">download</span>
+            </button>
+            <button class="rename-btn" title="Rename note">
+                <span class="material-icons">drive_file_rename_outline</span>
+            </button>
+            <button class="delete-btn" title="Delete note">
+                <span class="material-icons">delete_outline</span>
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- Empty State Template -->
+<template id="emptyStateTemplate">
+    <div class="note-item">
+        <div class="note-item-title">No saved notes yet</div>
+    </div>
+</template>
+
+<!-- Delete Confirmation Dialog -->
+<div id="deleteDialog" class="dialog-backdrop" style="display:none;">
+    <div class="dialog-box delete-dialog">
+        <div class="dialog-title">Delete this note?</div>
+        <div class="dialog-header-divider"></div>
+        <div class="dialog-actions center">
+            <button id="deleteCancel" class="dialog-btn cancel">Cancel</button>
+            <button id="deleteConfirm" class="dialog-btn danger">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Note Type Selection Dialog -->
+<div id="noteTypeDialog" class="dialog-backdrop" style="display:none;">
+    <div class="dialog-box">
+        <div class="dialog-title">Choose note type</div>
+        <div class="dialog-header-divider"></div>
+        <div class="dialog-actions center">
+            <button id="createPlainNote" class="dialog-btn primary">Plain Text</button>
+            <button id="createRichNote" class="dialog-btn primary">Rich Text</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename Dialog -->
+<div id="renameDialog" class="dialog-backdrop" style="display:none;">
+    <div class="dialog-box">
+        <div class="dialog-title">Rename note</div>
+        <div class="dialog-header-divider"></div>
+        <input id="renameInput" class="dialog-input" type="text">
+        <div class="dialog-actions end">
+            <button id="renameCancel" class="dialog-btn cancel">Cancel</button>
+            <button id="renameConfirm" class="dialog-btn primary">Rename</button>
+        </div>
+    </div>
+</div>
+
+<!-- Download Format Dialog -->
+<div id="downloadDialog" class="dialog-backdrop" style="display:none;">
+    <div class="dialog-box">
+        <div class="dialog-title">Download as</div>
+        <div class="dialog-header-divider"></div>
+        <div class="dialog-actions center">
+            <button id="downloadAsTxt" class="dialog-btn primary">.TXT</button>
+            <button id="downloadAsDoc" class="dialog-btn primary">.DOC</button>
+            <button id="downloadCancel" class="dialog-btn cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+<!-- Import/Export Menu Dialog -->
+<div id="menuDialog" class="dialog-backdrop" style="display:none;">
+    <div class="dialog-box menu-dialog">
+        <div class="dialog-title">Menu</div>
+        <div class="dialog-header-divider"></div>
+        <div class="menu-options">
+            <button id="menuExport" class="menu-option">
+                <span class="material-icons">download</span>
+                <span>Export All Notes</span>
+            </button>
+            <button id="menuImport" class="menu-option">
+                <span class="material-icons">upload</span>
+                <span>Import Notes</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Quill JS -->
+<script src="./lib/quill.js"></script>
+<script src="sidepanel.js"></script>
+
+</body>
+</html>

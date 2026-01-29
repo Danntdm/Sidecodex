@@ -1,0 +1,36 @@
+{
+    "manifest_version": 3,
+
+    "name": "SideCodex",
+    "description": "Simple yet versatile NotePad Extension for quick note taking",
+    "version": "1.0",
+
+    "permissions": ["storage", "sidePanel"],
+    
+    "icons": {
+        "16": "src/Images/16x16 Pastel Blue.png",
+        "32": "src/Images/32x32 Pastel Blue.png",
+        "64": "src/Images/64x64 Pastel Blue.png",
+        "128": "src/Images/128x128 Pastel Blue.png"
+    },
+
+    "action": {
+        "default_title": "Open NotePad",
+        "default_icon": {
+            "16": "src/Images/16x16 Pastel Blue.png",
+            "32": "src/Images/32x32 Pastel Blue.png",
+            "64": "src/Images/64x64 Pastel Blue.png",
+            "128": "src/Images/128x128 Pastel Blue.png"
+        }
+    },
+
+    "side_panel": {
+        "default_path": "src/sidepanel.html"   
+    },
+
+    "background": {
+        "service_worker": "src/service_worker.js"
+    }
+
+
+}
